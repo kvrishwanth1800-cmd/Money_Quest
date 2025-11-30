@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Money Wise Quest – Financial Literacy for Kids</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    :root {
+      --primary: #218085;
+      --primary-bright: #32b8c6;
+      --accent: #e6816d;
+      --bg: #fcfcf9;
+      --text: #134252;
+      --success: #22b14c;
+      --error: #c0152f;
+      --card-radius: 16px;
+      --shadow-soft: 0 4px 10px rgba(0,0,0,0.08);
+      --tap-size: 44px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #fef9f4, var(--bg));
+      color: var(--text);
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-bright));
+      color: white;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    header .title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    header .title span.logo-emoji {
+      font-size: 1.8rem;
+    }
+
+    header h1 {
+      font-size: 1.1rem;
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    header p {
+      margin: 0;
+      font-size: 0.8rem;
+      opacity: 0.9;
+    }
+
+    main {
+      flex: 1;
+      padding: 16px;
+      max-width: 960px;
+      width: 100%;
+      margin: 0 auto 24px auto;
+    }
+
+    footer {
+      text-align: center;
+      padding: 10px;
+      font-size: 0.75rem;
+      color: rgba(19,66,82,0.7);
+    }
+
+    /* Page + animation */
+    .page {
+      display: none;
+      animation: fadeIn 0.35s ease-out;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Cards & layout */
+    .card {
+      background: rgba(252,252,249,0.98);
+      border-radius: var(--card-radius);
+      box-shadow: var(--shadow-soft);
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .card-header-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .card-emoji {
+      font-size: 1.8rem;
+    }
+
+    h2, h3 {
+      margin-top: 0;
+      color: var(--primary);
+    }
+
+    h2 {
+      font-size: 1.4rem;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+    }
+
+    p {
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      min-width: var(--tap-size);
+      min-height: var(--tap-size);
+      text-decoration: none;
+      transition: transform 0.09s ease, box-shadow 0.09s ease, background 0.12s ease;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    }
+
+    .btn-primary:hover,
+    .btn-primary:focus-visible {
+      background: var(--primary-bright);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+    }
+
+    .btn-secondary {
+      background: #fff;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-secondary:hover,
+    .btn-secondary:focus-visible {
+      background: #eefcfd;
+    }
+
+    .btn-small {
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      min-height: var(--tap-size);
+    }
+
+    .btn-choice {
+      flex: 1;
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: #fff;
+    }
+
+    .btn-error {
+      background: var(--error);
+      color: #fff;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border: none;
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: underline;
+      padding: 4px 0;
+      min-height: var(--tap-size);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Home menu */
+    #menu .option-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 10px;
+    }
+
+    .menu-card {
+      cursor: pointer;
+      border-left: 6px solid var(--primary);
+    }
+
+    .menu-card.visited {
+      border-left-color: var(--success);
+    }
+
+    .menu-card-title {
+      font-size: 1.05rem;
+      margin: 0;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      background: rgba(50,184,198,0.12);
+      color: var(--primary);
+      margin-top: 4px;
+    }
+
+    .progress-indicator {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      font-size: 0.85rem;
+      margin-top: 10px;
+    }
+
+    .progress-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid rgba(19,66,82,0.3);
+      background: transparent;
+    }
+
+    .progress-dot.visited {
+      background: var(--success);
+      border-color: var(--success);
+    }
+
+    /* Video section */
+    .video-placeholder {
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(49,184,198,0.15), rgba(230,129,109,0.15));
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+    }
+
+    .video-placeholder p {
+      margin: 0;
+    }
+
+    .video-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #000;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      text-align: center;
+      padding: 10px;
+    }
+
+    /* Quiz */
+    .quiz-item-card {
+      border-radius: 14px;
+      padding: 12px;
+      background: #fff;
+      box-shadow: var(--shadow-soft);
+      margin-top: 10px;
+    }
+
+    .quiz-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .quiz-item-main {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+      margin-bottom: 12px;
+    }
+
+    .quiz-emoji {
+      font-size: 2rem;
+    }
+
+    .quiz-labels {
+      font-size: 0.9rem;
+    }
+
+    .price-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(230,129,109,0.08);
+      color: var(--accent);
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .quiz-feedback {
+      font-size: 0.9rem;
+      margin-top: 8px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: rgba(0,0,0,0.02);
+    }
+
+    .quiz-feedback.correct {
+      background: rgba(34,177,76,0.1);
+      color: var(--success);
+    }
+
+    .quiz-feedback.wrong {
+      background: rgba(192,21,47,0.07);
+      color: var(--error);
+    }
+
+    .quiz-status {
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+
+    .quiz-result {
+      text-align: center;
+    }
+
+    .quiz-score {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    /* Entrepreneurs page */
+    .entre-card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .entre-card {
+      border-radius: var(--card-radius);
+      padding: 12px;
+      background: linear-gradient(135deg, rgba(49,184,198,0.14), rgba(252,252,249,0.99));
+      box-shadow: var(--shadow-soft);
+    }
+
+    .entre-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .earnings-pill {
+      background: rgba(230,129,109,0.12);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .earnings-bar {
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(19,66,82,0.08);
+      overflow: hidden;
+      margin-top: 6px;
+      position: relative;
+    }
+
+    .earnings-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--success), var(--accent));
+      transition: width 0.6s ease-out;
+    }
+
+    .entre-details {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    .entre-details.open {
+      display: block;
+    }
+
+    .entre-quote {
+      font-style: italic;
+      font-size: 0.9rem;
+      margin: 6px 0;
+    }
+
+    .tip-box {
+      background: rgba(255,255,255,0.9);
+      border-radius: 10px;
+      padding: 8px 10px;
+      border-left: 4px solid var(--primary-bright);
+      font-size: 0.85rem;
+    }
+
+    .form-group {
+      margin-bottom: 10px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      margin-bottom: 2px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(19,66,82,0.18);
+      font-size: 0.9rem;
+      font-family: inherit;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 70px;
+    }
+
+    /* Comic page */
+    .comic-panel {
+      border-radius: 14px;
+      padding: 10px 12px;
+      background: #fff;
+      box-shadow: var(--shadow-soft);
+      margin-bottom: 10px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .comic-emoji {
+      font-size: 1.8rem;
+      flex-shrink: 0;
+    }
+
+    .comic-body {
+      font-size: 0.9rem;
+    }
+
+    .comic-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--primary);
+    }
+
+    .scenario-box {
+      background: rgba(49,184,198,0.08);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+    }
+
+    .scenario-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 6px;
+      font-size: 0.85rem;
+    }
+
+    .scenario-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(230,129,109,0.12);
+      color: var(--accent);
+      font-size: 0.75rem;
+    }
+
+    .mini-note {
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(33,128,133,0.1);
+      font-size: 0.8rem;
+    }
+
+    .back-row {
+      margin-bottom: 10px;
+    }
+
+    @media (min-width: 640px) {
+      #menu .option-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="title">
+      <span class="logo-emoji">💳</span>
+      <div>
+        <h1>Money Wise Quest</h1>
+        <p>Financial literacy quests for kids in Singapore (Ages 7–12)</p>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HOME / MENU -->
+    <section id="menu" class="page active" aria-label="Main menu">
+      <div class="card">
+        <div class="card-header-row">
+          <div class="card-emoji">🎯</div>
+          <div>
+            <h2>Choose Your Quest</h2>
+            <p>Tap a card to start learning. You can scan QR codes on a tablet and play each activity like a game card.</p>
+          </div>
+        </div>
+
+        <div class="progress-indicator" aria-label="Progress indicator">
+          <span>Progress:</span>
+          <span class="progress-dot" data-page-dot="needs"> </span>
+          <span class="progress-dot" data-page-dot="entre"> </span>
+          <span class="progress-dot" data-page-dot="rainy"> </span>
+        </div>
+      </div>
+
+      <div class="option-grid" aria-label="Learning modules">
+        <!-- Needs vs Wants -->
+        <article class="card menu-card" data-target="page-needs-wants" tabindex="0" role="button" aria-pressed="false">
+          <div class="card-header-row">
+            <div class="card-emoji">⚖️</div>
+            <div>
+              <h3 class="menu-card-title">Needs vs Wants</h3>
+              <span class="tag">Quiz • SGD examples</span>
+            </div>
+          </div>
+          <p>Learn the difference between what we must have and what is nice to have, using real-life examples in Singapore.</p>
+        </article>
+
+        <!-- Entrepreneurs -->
+        <article class="card menu-card" data-target="page-entrepreneurs" tabindex="0" role="button" aria-pressed="false">
+          <div class="card-header-row">
+            <div class="card-emoji">🚀</div>
+            <div>
+              <h3 class="menu-card-title">Singapore Child Entrepreneurs</h3>
+              <span class="tag">Story Cards • Inspiration</span>
+            </div>
+          </div>
+          <p>Meet kids like you who earn money with creative ideas—from baking to pet-sitting to tutoring.</p>
+        </article>
+
+        <!-- Saving for a Rainy Day -->
+        <article class="card menu-card" data-target="page-rainy-day" tabindex="0" role="button" aria-pressed="false">
+          <div class="card-header-row">
+            <div class="card-emoji">🌧️</div>
+            <div>
+              <h3 class="menu-card-title">Saving for a Rainy Day</h3>
+              <span class="tag">Comic • Savings Game</span>
+            </div>
+          </div>
+          <p>Follow Sam’s story to see how emergency savings can save the day—and calculate your own savings power.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- PAGE 1: NEEDS VS WANTS -->
+    <section id="page-needs-wants" class="page" aria-label="Needs vs Wants">
+      <div class="back-row">
+        <button class="btn btn-secondary btn-small" type="button" data-nav="menu">⬅ Back to Menu</button>
+      </div>
+
+      <article class="card">
+        <div class="card-header-row">
+          <div class="card-emoji">⚖️</div>
+          <div>
+            <h2>Needs vs Wants</h2>
+            <p>Understand what we really need to live and what we simply want to enjoy.</p>
+          </div>
+        </div>
+
+        <!-- Video section -->
+        <section aria-label="Needs vs Wants video explanation">
+          <h3>Watch this first 🎥</h3>
+          <div class="video-placeholder">
+            <div class="video-frame">
+              <!-- Replace this with your actual video or YouTube embed -->
+              <span>
+                <strong>Video placeholder:</strong><br>
+                Explain with examples like:<br>
+                <em>Lunch (Need), Bubble Tea (Want), School Uniform (Need), Toy (Want)</em><br>
+                Keep under 3 minutes.
+              </span>
+            </div>
+            <p class="mini-note">
+              Tip for teacher: Replace the placeholder above with your real video file or an embedded YouTube/Vimeo link.
+            </p>
+          </div>
+        </section>
+      </article>
+
+      <article class="card" aria-label="Needs vs Wants quiz">
+        <h3>Quick Quiz: Need or Want?</h3>
+        <p>Tap the correct answer. You’ll see your score and a friendly explanation after each choice.</p>
+
+        <div id="quiz-container">
+          <div id="quiz-question-area"></div>
+          <div id="quiz-result-area" style="display:none;"></div>
+        </div>
+      </article>
+    </section>
+
+    <!-- PAGE 2: SINGAPORE CHILD ENTREPRENEURS -->
+    <section id="page-entrepreneurs" class="page" aria-label="Singapore Child Entrepreneurs">
+      <div class="back-row">
+        <button class="btn btn-secondary btn-small" type="button" data-nav="menu">⬅ Back to Menu</button>
+      </div>
+
+      <article class="card">
+        <div class="card-header-row">
+          <div class="card-emoji">🚀</div>
+          <div>
+            <h2>Singapore Child Entrepreneurs</h2>
+            <p>These story cards show how kids in Singapore turn ideas into real earnings in SGD.</p>
+          </div>
+        </div>
+        <p class="mini-note">Tap “Read Their Story” on each card to open and learn how they did it.</p>
+      </article>
+
+      <article class="card" aria-label="Entrepreneur story cards">
+        <h3>Collectible Story Cards</h3>
+        <div class="entre-card-list" id="entre-list">
+          <!-- Populated by JavaScript -->
+        </div>
+      </article>
+
+      <article class="card" aria-label="Share your entrepreneur idea">
+        <h3>Share Your Own Idea 💡</h3>
+        <p>Imagine your own mini-business. What could you do to earn and save money?</p>
+        <form id="idea-form">
+          <div class="form-group">
+            <label for="idea-name">Your name (or nickname)</label>
+            <input type="text" id="idea-name" name="name" maxlength="30" placeholder="e.g., Jayden">
+          </div>
+          <div class="form-group">
+            <label for="idea-age">Your age</label>
+            <input type="number" id="idea-age" name="age" min="7" max="12" placeholder="10">
+          </div>
+          <div class="form-group">
+            <label for="idea-type">Your business idea</label>
+            <input type="text" id="idea-type" name="type" maxlength="60" placeholder="e.g., Custom keychains, slime kits">
+          </div>
+          <div class="form-group">
+            <label for="idea-details">What would you do? How would you use the money?</label>
+            <textarea id="idea-details" name="details" maxlength="300"></textarea>
+          </div>
+          <button class="btn btn-primary" type="submit">Submit My Idea</button>
+          <p id="idea-message" class="mini-note" aria-live="polite"></p>
+        </form>
+      </article>
+    </section>
+
+    <!-- PAGE 3: SAVING FOR A RAINY DAY -->
+    <section id="page-rainy-day" class="page" aria-label="Saving for a Rainy Day">
+      <div class="back-row">
+        <button class="btn btn-secondary btn-small" type="button" data-nav="menu">⬅ Back to Menu</button>
+      </div>
+
+      <article class="card">
+        <div class="card-header-row">
+          <div class="card-emoji">🌧️</div>
+          <div>
+            <h2>Saving for a Rainy Day</h2>
+            <p>Follow Sam’s story to see how emergency savings can rescue you when life surprises you.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="card" aria-label="Sam's emergency savings comic">
+        <h3>Sam’s Emergency Savings Journey 📖</h3>
+
+        <div class="comic-panel">
+          <div class="comic-emoji">🧒</div>
+          <div class="comic-body">
+            <div class="comic-title">Panel 1 – Allowance Time</div>
+            <p>Sam gets <strong>S$10</strong> every week for helping with chores at home. Sam wants to use the money wisely.</p>
+          </div>
+        </div>
+
+        <div class="comic-panel">
+          <div class="comic-emoji">🎮</div>
+          <div class="comic-body">
+            <div class="comic-title">Panel 2 – The Temptation</div>
+            <p>Sam sees a fun video game that costs <strong>S$8</strong>. It looks super exciting!</p>
+            <div class="scenario-box">
+              <strong>What would YOU do?</strong><br>
+              Should Sam buy the game now or save the money?
+              <div class="btn-row" style="margin-top:6px;">
+                <button class="btn btn-secondary btn-small" type="button" id="choice-buy">Buy now</button>
+                <button class="btn btn-primary btn-small" type="button" id="choice-save">Save it</button>
+              </div>
+              <p id="choice-result" class="mini-note" aria-live="polite"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="comic-panel">
+          <div class="comic-emoji">🐷</div>
+          <div class="comic-body">
+            <div class="comic-title">Panel 3 – The Decision</div>
+            <p>Sam decides to put the money into a piggy bank instead. “I’ll save for something important,” Sam thinks.</p>
+          </div>
+        </div>
+
+        <div class="comic-panel">
+          <div class="comic-emoji">⏳</div>
+          <div class="comic-body">
+            <div class="comic-title">Panel 4 – Savings Grow</div>
+            <p>After a few weeks, Sam has saved <strong>S$40</strong>. The piggy bank feels heavy!</p>
+          </div>
+        </div>
+
+        <div class="comic-panel">
+          <div class="comic-emoji">📱</div>
+          <div class="comic-body">
+            <div class="comic-title">Panel 5 – The Emergency</div>
+            <p>Oh no! Sam’s phone accidentally falls and the screen cracks. The repair costs <strong>S$35</strong>.</p>
+          </div>
+        </div>
+
+        <div class="comic-panel">
+          <div class="comic-emoji">😌</div>
+          <div class="comic-body">
+            <div class="comic-title">Panel 6 – Saved by Savings</div>
+            <p>Sam uses the saved money to fix the phone. No need to borrow from parents or friends!</p>
+          </div>
+        </div>
+
+        <div class="comic-panel">
+          <div class="comic-emoji">💡</div>
+          <div class="comic-body">
+            <div class="comic-title">Panel 7 – New Understanding</div>
+            <p>Sam realises that <strong>emergency savings</strong> are very powerful. They protect us from surprise costs.</p>
+          </div>
+        </div>
+
+        <div class="comic-panel">
+          <div class="comic-emoji">🏦</div>
+          <div class="comic-body">
+            <div class="comic-title">Panel 8 – Next Goal</div>
+            <p>Now Sam keeps saving for both emergencies <em>and</em> fun goals like a new bike.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="card" aria-label="Savings tracker">
+        <h3>Your Savings Tracker 📊</h3>
+        <p>See how your money can grow if you save a part of your allowance each week.</p>
+
+        <div class="form-group">
+          <label for="allowance-input">Your weekly allowance (S$)</label>
+          <input type="number" id="allowance-input" min="0" step="1" placeholder="e.g., 10">
+        </div>
+        <div class="form-group">
+          <label for="save-percent-input">How much will you save from it? (%)</label>
+          <input type="number" id="save-percent-input" min="0" max="100" step="5" placeholder="e.g., 50">
+        </div>
+        <div class="form-group">
+          <label for="weeks-input">For how many weeks?</label>
+          <input type="number" id="weeks-input" min="1" max="52" step="1" placeholder="e.g., 12">
+        </div>
+        <button class="btn btn-primary" type="button" id="calc-savings">Calculate My Savings</button>
+        <p id="savings-result" class="mini-note" aria-live="polite"></p>
+      </article>
+
+      <article class="card" aria-label="Emergency scenarios game">
+        <h3>Emergency Scenarios Game 🚨</h3>
+        <p>Imagine you have some savings. Are they enough to handle these surprise costs?</p>
+
+        <div class="form-group">
+          <label for="my-savings-input">How much have you saved? (S$)</label>
+          <input type="number" id="my-savings-input" min="0" step="1" placeholder="e.g., 40">
+        </div>
+        <button class="btn btn-primary btn-small" type="button" id="check-scenarios">Check My Savings</button>
+
+        <div class="scenario-box" aria-live="polite" id="scenario-list">
+          <!-- Filled by JS -->
+        </div>
+      </article>
+
+      <article class="card" aria-label="Why emergency savings matter">
+        <h3>Why Do Emergency Savings Matter?</h3>
+        <ul style="padding-left: 18px; font-size: 0.9rem; margin-top: 4px;">
+          <li>They help you solve problems <strong>quickly</strong> without stress.</li>
+          <li>You don’t need to borrow from parents or friends all the time.</li>
+          <li>You feel more <strong>confident and responsible</strong>.</li>
+          <li>You’re ready for broken things, lost items, or medical costs.</li>
+          <li>You can still save for fun goals after your emergency fund is ready.</li>
+          <li>Learning this young prepares you to handle money wisely as an adult.</li>
+        </ul>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    Money Wise Quest • Designed for primary school learners in Singapore • SGD context
+  </footer>
+
+  <script>
+    // ------------------------------
+    // BASIC NAVIGATION + PROGRESS
+    // ------------------------------
+    const pages = {
+      menu: document.getElementById('menu'),
+      needs: document.getElementById('page-needs-wants'),
+      entre: document.getElementById('page-entrepreneurs'),
+      rainy: document.getElementById('page-rainy-day')
+    };
+
+    const visitedKey = 'mwq_visited_pages';
+    let visitedPages = JSON.parse(sessionStorage.getItem(visitedKey) || '[]');
+
+    function setActivePage(targetId) {
+      Object.values(pages).forEach(p => p.classList.remove('active'));
+      const pageElement = pages[targetId] || pages.menu;
+      pageElement.classList.add('active');
+
+      if (targetId !== 'menu' && !visitedPages.includes(targetId)) {
+        visitedPages.push(targetId);
+        sessionStorage.setItem(visitedKey, JSON.stringify(visitedPages));
+      }
+      updateProgressDots();
+      updateMenuVisitedCards();
+    }
+
+    function updateProgressDots() {
+      const mapping = { needs: 'page-needs-wants', entre: 'page-entrepreneurs', rainy: 'page-rainy-day' };
+      document.querySelectorAll('.progress-dot').forEach(dot => {
+        dot.classList.remove('visited');
+      });
+      if (visitedPages.includes('page-needs-wants')) {
+        document.querySelector('[data-page-dot="needs"]').classList.add('visited');
+      }
+      if (visitedPages.includes('page-entrepreneurs')) {
+        document.querySelector('[data-page-dot="entre"]').classList.add('visited');
+      }
+      if (visitedPages.includes('page-rainy-day')) {
+        document.querySelector('[data-page-dot="rainy"]').classList.add('visited');
+      }
+    }
+
+    function updateMenuVisitedCards() {
+      document.querySelectorAll('.menu-card').forEach(card => {
+        const targetId = card.getAttribute('data-target');
+        if (visitedPages.includes(targetId)) {
+          card.classList.add('visited');
+        }
+      });
+    }
+
+    // Menu card navigation (click + keyboard)
+    document.querySelectorAll('.menu-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const target = card.getAttribute('data-target');
+        setActivePageFromElementId(target);
+      });
+      card.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          const target = card.getAttribute('data-target');
+          setActivePageFromElementId(target);
+        }
+      });
+    });
+
+    function setActivePageFromElementId(elementId) {
+      if (elementId === 'page-needs-wants') setActivePage('needs');
+      else if (elementId === 'page-entrepreneurs') setActivePage('entre');
+      else if (elementId === 'page-rainy-day') setActivePage('rainy');
+      else setActivePage('menu');
+    }
+
+    // Back buttons
+    document.querySelectorAll('[data-nav="menu"]').forEach(btn => {
+      btn.addEventListener('click', () => setActivePage('menu'));
+    });
+
+    // Initialise progress on load
+    updateProgressDots();
+    updateMenuVisitedCards();
+
+    // --------------------------------
+    // PAGE 1: NEEDS VS WANTS QUIZ
+    // --------------------------------
+    const quizItems = [
+      { emoji: '🍱', name: 'School lunch', price: 3, type: 'need', reason: 'You need food to stay healthy and focus in class.' },
+      { emoji: '🧃', name: 'Bubble tea', price: 5, type: 'want', reason: 'It is a nice treat, but not something you must have every day.' },
+      { emoji: '📚', name: 'Textbook', price: 20, type: 'need', reason: 'You need textbooks for learning in school.' },
+      { emoji: '🎮', name: 'Video game', price: 50, type: 'want', reason: 'Games are fun, but they are not essential to live.' },
+      { emoji: '💊', name: 'Medicine', price: 10, type: 'need', reason: 'Medicine keeps you healthy and helps you recover.' },
+      { emoji: '👟', name: 'School shoes', price: 30, type: 'need', reason: 'You need proper shoes as part of your school uniform.' },
+      { emoji: '🧸', name: 'Soft toy', price: 15, type: 'want', reason: 'Toys make you happy, but they are not a basic need.' },
+      { emoji: '🚍', name: 'Bus ride to school', price: 1.50, type: 'need', reason: 'You need transport to get to school safely.' },
+      { emoji: '🍿', name: 'Movie ticket', price: 12, type: 'want', reason: 'Watching a movie is entertainment, not a basic need.' },
+      { emoji: '👕', name: 'School uniform', price: 25, type: 'need', reason: 'Uniforms are required for school in Singapore.' },
+    ];
+
+    let quizOrder = [];
+    let quizIndex = 0;
+    let quizScore = 0;
+
+    const quizQuestionArea = document.getElementById('quiz-question-area');
+    const quizResultArea = document.getElementById('quiz-result-area');
+
+    function shuffle(array) {
+      const arr = array.slice();
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function startQuiz() {
+      quizOrder = shuffle(quizItems);
+      quizIndex = 0;
+      quizScore = 0;
+      quizResultArea.style.display = 'none';
+      quizQuestionArea.style.display = 'block';
+      renderQuizQuestion();
+    }
+
+    function renderQuizQuestion() {
+      const item = quizOrder[quizIndex];
+      const questionNumber = quizIndex + 1;
+      const total = quizOrder.length;
+
+      quizQuestionArea.innerHTML = `
+        <div class="quiz-item-card" aria-live="polite">
+          <div class="quiz-item-header">
+            <div class="quiz-status">Question ${questionNumber} of ${total}</div>
+            <div class="price-tag">S$${item.price.toFixed(2)}</div>
+          </div>
+          <div class="quiz-item-main">
+            <div class="quiz-emoji">${item.emoji}</div>
+            <div class="quiz-labels">
+              <strong>${item.name}</strong><br>
+              Is this a <em>need</em> or a <em>want</em>?
+            </div>
+          </div>
+          <div class="btn-row">
+            <button type="button" class="btn btn-secondary btn-choice" data-answer="need">Need</button>
+            <button type="button" class="btn btn-secondary btn-choice" data-answer="want">Want</button>
+          </div>
+          <div id="quiz-feedback" class="quiz-feedback" style="display:none;"></div>
+        </div>
+      `;
+
+      quizQuestionArea.querySelectorAll('.btn-choice').forEach(btn => {
+        btn.addEventListener('click', () => handleQuizAnswer(btn.getAttribute('data-answer')));
+      });
+    }
+
+    function handleQuizAnswer(answer) {
+      const item = quizOrder[quizIndex];
+      const feedbackEl = document.getElementById('quiz-feedback');
+
+      const isCorrect = answer === item.type;
+      if (isCorrect) {
+        quizScore++;
+        feedbackEl.textContent = `✅ Correct! ${item.reason}`;
+        feedbackEl.classList.remove('wrong');
+        feedbackEl.classList.add('correct');
+      } else {
+        feedbackEl.textContent = `❌ Not quite. ${item.reason}`;
+        feedbackEl.classList.remove('correct');
+        feedbackEl.classList.add('wrong');
+      }
+      feedbackEl.style.display = 'block';
+
+      // Disable buttons after one answer
+      quizQuestionArea.querySelectorAll('.btn-choice').forEach(btn => {
+        btn.disabled = true;
+        if (btn.getAttribute('data-answer') === item.type) {
+          btn.classList.add('btn-success');
+        } else {
+          btn.classList.add('btn-error');
+        }
+      });
+
+      setTimeout(() => {
+        quizIndex++;
+        if (quizIndex < quizOrder.length) {
+          renderQuizQuestion();
+        } else {
+          showQuizResult();
+        }
+      }, 1000);
+    }
+
+    function showQuizResult() {
+      const total = quizOrder.length;
+      const percent = Math.round((quizScore / total) * 100);
+      let message = '';
+
+      if (percent === 100) {
+        message = 'Amazing! You are a Needs vs Wants Master!';
+      } else if (percent >= 70) {
+        message = 'Great job! You mostly know how to tell needs from wants.';
+      } else {
+        message = 'Good try! Review the items and try again to improve your score.';
+      }
+
+      quizQuestionArea.style.display = 'none';
+      quizResultArea.style.display = 'block';
+      quizResultArea.innerHTML = `
+        <div class="quiz-result">
+          <div class="quiz-score">You scored ${quizScore} / ${total} (${percent}%)</div>
+          <p>${message}</p>
+          <button type="button" class="btn btn-primary" id="quiz-retry">Try Again</button>
+        </div>
+      `;
+
+      // Save score in session storage (optional use later)
+      sessionStorage.setItem('mwq_quiz_score', percent.toString());
+
+      document.getElementById('quiz-retry').addEventListener('click', startQuiz);
+    }
+
+    // Start quiz when page first opened
+    // (In case user lands here via QR)
+    startQuiz();
+
+    // --------------------------------
+    // PAGE 2: ENTREPRENEURS
+    // --------------------------------
+    const entrepreneurs = [
+      {
+        emoji: '📿',
+        name: 'Aisha',
+        age: 10,
+        type: 'Jewelry Maker',
+        earnings: 500,
+        summary: 'Made colourful beaded bracelets and sold them at a school bazaar.',
+        story: 'Aisha loved making bracelets for her friends. When her school had a charity bazaar, she set up a small table with her handmade jewellery. She used some of her savings to buy beads and elastic strings. By carefully planning her prices and smiling at every customer, she sold almost every bracelet! She kept a notebook to record her costs and earnings.',
+        challenge: 'At first, Aisha was shy to talk to strangers and some bracelets snapped easily, so she had to improve her designs.',
+        lesson: 'Test your product and practise talking to people politely. Small improvements can make customers very happy.',
+        quote: '"I didn’t know my hobby could help me earn AND donate at the same time!"',
+        tips: ['Start with people you know, like friends and family.', 'Keep your designs simple and strong.', 'Practise your “Hello!” and “Thank you!” lines.']
+      },
+      {
+        emoji: '🐶',
+        name: 'Marcus',
+        age: 9,
+        type: 'Pet Sitter',
+        earnings: 150,
+        summary: 'Helped neighbours take care of dogs when they were busy or travelling.',
+        story: 'Marcus loved dogs but did not have one at home, so he offered to walk and play with his neighbours’ pets. He made a simple flyer with his parents’ phone number and put it in the lift lobby. Soon, families started asking him to feed and walk their dogs after school or during holidays.',
+        challenge: 'Some dogs were very energetic and pulled the leash hard. Marcus had to learn how to handle them safely with adult supervision.',
+        lesson: 'You must be reliable and careful when you take care of someone else’s pet. Trust is very important.',
+        quote: '"The dogs are happy, the owners are happy, and I get paid to do something I enjoy!"',
+        tips: ['Always have an adult nearby when walking pets.', 'Write down feeding times so you don’t forget.', 'Start with short sessions before taking more bookings.']
+      },
+      {
+        emoji: '🍪',
+        name: 'Priya',
+        age: 11,
+        type: 'Baker',
+        earnings: 300,
+        summary: 'Baked cookies with her mum and sold them at school events.',
+        story: 'Priya loved baking with her mum on weekends. They tested a chocolate chip cookie recipe until it was perfect. For school events, they packed the cookies into small paper bags with a cute sticker. Priya calculated her ingredient costs and set a fair price. She saved her earnings to buy a bicycle she had been dreaming about.',
+        challenge: 'Some batches burned at first and she had to remake them, learning about timing and oven temperature.',
+        lesson: 'Planning your costs and practising your recipe can turn a hobby into a small business.',
+        quote: '"Every cookie sold brought me one step closer to my new bicycle!"',
+        tips: ['Test your recipe before selling it.', 'Work with an adult when using the oven.', 'Use simple, clear labels on your packaging.']
+      },
+      {
+        emoji: '📚',
+        name: 'Dev',
+        age: 10,
+        type: 'Student Tutor',
+        earnings: 200,
+        summary: 'Tutored younger kids in maths and earned money over the school term.',
+        story: 'Dev enjoyed solving maths problems and often finished his homework early. His neighbour’s P2 child was struggling, so Dev offered to help twice a week. He created simple worksheets and fun quizzes. His neighbour decided to pay him a small fee each month as a “thank you”.',
+        challenge: 'Dev had to learn how to explain things slowly and clearly, not just give the answer.',
+        lesson: 'Teaching others helps you revise your own knowledge and builds patience.',
+        quote: '"When my student finally understood fractions, we both felt proud!"',
+        tips: ['Be patient and friendly when teaching.', 'Prepare simple practice questions.', 'Always check with parents/guardians before starting.']
+      }
+    ];
+
+    const entreList = document.getElementById('entre-list');
+
+    function renderEntrepreneurs() {
+      entrepreneurs.forEach((e, index) => {
+        const card = document.createElement('article');
+        card.className = 'entre-card';
+        card.setAttribute('aria-label', `${e.name}, child entrepreneur card`);
+
+        card.innerHTML = `
+          <div class="entre-header">
+            <div>
+              <strong>${e.emoji} ${e.name}, Age ${e.age}</strong><br>
+              <span class="pill">${e.type}</span>
+            </div>
+            <div>
+              <span class="earnings-pill">
+                💵 Earnings: S$<span class="earnings-amount" data-target="${e.earnings}">0</span>
+              </span>
+            </div>
+          </div>
+          <p style="margin:6px 0 8px 0;">${e.summary}</p>
+          <div class="earnings-bar" aria-hidden="true">
+            <div class="earnings-bar-fill" data-bar-index="${index}"></div>
+          </div>
+          <button type="button" class="btn btn-secondary btn-small" data-toggle-details="${index}">
+            Read Their Story
+          </button>
+          <div class="entre-details" id="entre-details-${index}">
+            <p><strong>How they started:</strong> ${e.story}</p>
+            <p><strong>Challenges they faced:</strong> ${e.challenge}</p>
+            <p><strong>What they learned:</strong> ${e.lesson}</p>
+            <p class="entre-quote">“${e.quote.replace(/"/g, '')}”</p>
+            <div class="tip-box">
+              <strong>Inspiration Tips – How YOU can do this too:</strong>
+              <ul style="padding-left:18px;margin:4px 0;">
+                ${e.tips.map(t => `<li>${t}</li>`).join('')}
+              </ul>
+            </div>
+          </div>
+        `;
+
+        entreList.appendChild(card);
+      });
+
+      // Add toggle behaviour + animated earnings
+      document.querySelectorAll('[data-toggle-details]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = btn.getAttribute('data-toggle-details');
+          const details = document.getElementById(`entre-details-${idx}`);
+          const open = details.classList.toggle('open');
+          btn.textContent = open ? 'Hide Story' : 'Read Their Story';
+
+          if (open) {
+            animateEarnings(idx);
+          }
+        });
+      });
+    }
+
+    function animateEarnings(index) {
+      const card = entreList.children[index];
+      if (!card) return;
+
+      const amountSpan = card.querySelector('.earnings-amount');
+      const target = parseInt(amountSpan.getAttribute('data-target'), 10);
+      const barFill = card.querySelector(`[data-bar-index="${index}"]`);
+      let current = 0;
+      const duration = 800; // ms
+      const stepTime = 30;
+      const steps = duration / stepTime;
+      const increment = target / steps;
+
+      const existing = amountSpan.getAttribute('data-animated');
+      if (existing === 'true') return; // avoid re-animating
+      amountSpan.setAttribute('data-animated', 'true');
+
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          current = target;
+          clearInterval(timer);
+        }
+        amountSpan.textContent = Math.round(current);
+        const percent = Math.min(100, (current / 600) * 100); // scale vs ~S$600 cap
+        barFill.style.width = percent + '%';
+      }, stepTime);
+    }
+
+    renderEntrepreneurs();
+
+    // "Share Your Story" form
+    const ideaForm = document.getElementById('idea-form');
+    const ideaMessage = document.getElementById('idea-message');
+
+    ideaForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('idea-name').value.trim() || 'Young Entrepreneur';
+      const type = document.getElementById('idea-type').value.trim() || 'a cool idea';
+      ideaMessage.textContent = `${name}, your idea about ${type} sounds awesome! Share it with your teacher or family and see how you can make it real.`;
+      ideaForm.reset();
+    });
+
+    // --------------------------------
+    // PAGE 3: INTERACTIVE SAVINGS
+    // --------------------------------
+    // Choices for Sam
+    const choiceBuy = document.getElementById('choice-buy');
+    const choiceSave = document.getElementById('choice-save');
+    const choiceResult = document.getElementById('choice-result');
+
+    choiceBuy.addEventListener('click', () => {
+      choiceResult.textContent = 'If Sam buys the game now, there will be less money left for emergencies. The game is fun, but the savings might not be enough to fix the phone later.';
+    });
+
+    choiceSave.addEventListener('click', () => {
+      choiceResult.textContent = 'Great choice! By saving instead of buying the game, Sam builds an emergency fund that later helps to fix the broken phone.';
+    });
+
+    // Savings tracker
+    const allowanceInput = document.getElementById('allowance-input');
+    const percentInput = document.getElementById('save-percent-input');
+    const weeksInput = document.getElementById('weeks-input');
+    const calcBtn = document.getElementById('calc-savings');
+    const savingsResult = document.getElementById('savings-result');
+
+    calcBtn.addEventListener('click', () => {
+      const allowance = parseFloat(allowanceInput.value);
+      const percent = parseFloat(percentInput.value);
+      const weeks = parseInt(weeksInput.value, 10);
+
+      if (isNaN(allowance) || isNaN(percent) || isNaN(weeks)) {
+        savingsResult.textContent = 'Please fill in all the boxes to see your savings.';
+        return;
+      }
+      if (percent < 0 || percent > 100) {
+        savingsResult.textContent = 'Your saving percentage should be between 0 and 100.';
+        return;
+      }
+      const perWeekSaved = allowance * (percent / 100);
+      const totalSaved = perWeekSaved * weeks;
+
+      savingsResult.textContent = `If you save S$${perWeekSaved.toFixed(2)} each week for ${weeks} weeks, you will have S$${totalSaved.toFixed(2)} saved. That could help with an emergency or a big goal!`;
+    });
+
+    // Emergency scenarios
+    const scenarios = [
+      { emoji: '🚲', name: 'Broken bicycle repair', cost: 60 },
+      { emoji: '👟', name: 'Replacing lost school shoes', cost: 45 },
+      { emoji: '🐶', name: 'Vet visit for a sick pet', cost: 80 },
+      { emoji: '📱', name: 'Fixing a cracked phone screen', cost: 35 },
+      { emoji: '🎒', name: 'New school bag after old one tears', cost: 40 }
+    ];
+
+    const scenarioList = document.getElementById('scenario-list');
+    const mySavingsInput = document.getElementById('my-savings-input');
+    const checkScenariosBtn = document.getElementById('check-scenarios');
+
+    function renderScenarios() {
+      scenarioList.innerHTML = scenarios.map(s => `
+        <div class="scenario-row">
+          <div>
+            <strong>${s.emoji} ${s.name}</strong><br>
+            <span class="scenario-tag">Approx. cost: S$${s.cost}</span>
+          </div>
+          <div class="mini-note" data-scenario-name="${s.name}">
+            <!-- Filled after check -->
+          </div>
+        </div>
+      `).join('');
+    }
+
+    checkScenariosBtn.addEventListener('click', () => {
+      const savings = parseFloat(mySavingsInput.value);
+      if (isNaN(savings)) {
+        scenarioList.innerHTML = '<p class="mini-note">Please enter how much you have saved first.</p>';
+        return;
+      }
+      renderScenarios();
+
+      scenarios.forEach(s => {
+        const note = scenarioList.querySelector(`[data-scenario-name="${s.name}"]`);
+        if (!note) return;
+        if (savings >= s.cost) {
+          note.textContent = '✅ Your savings are enough to cover this emergency!';
+          note.style.color = 'var(--success)';
+        } else {
+          note.textContent = '⚠️ Your savings are not enough yet. Keep saving to be ready.';
+          note.style.color = 'var(--error)';
+        }
+      });
+    });
+
+    // Initial scenarios render (without results)
+    renderScenarios();
+
+    // Optional: restore quiz score or other tracking later if needed
+  </script>
+</body>
+</html>
