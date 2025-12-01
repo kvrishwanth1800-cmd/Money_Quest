@@ -1352,8 +1352,33 @@
     renderScenarios();
 
     // Optional: restore quiz score or other tracking later if needed
+    // -------------------------------------------
+// AUTO-OPEN PAGE BASED ON URL HASH (#needs / #entre / #rainy)
+// -------------------------------------------
+    function handleHashNavigation() {
+      const hash = window.location.hash.toLowerCase();
+    
+      if (hash === '#needs') {
+        setActivePage('needs');
+      } else if (hash === '#entre') {
+        setActivePage('entre');
+      } else if (hash === '#rainy') {
+        setActivePage('rainy');
+      } else {
+        // default → open menu
+        setActivePage('menu');
+      }
+    }
+    
+    // Listen when the page loads
+    window.addEventListener('DOMContentLoaded', handleHashNavigation);
+    
+    // Listen when hash changes (if user clicks QR without refresh)
+    window.addEventListener('hashchange', handleHashNavigation);
+      
   </script>
 </body>
 </html>
+
 
 
